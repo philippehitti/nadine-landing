@@ -1,42 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Nadine</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+  <style>
     body {
+      margin: 0;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #ffffff;
-      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #000000, #1a1a1a);
+      font-family: 'Playfair Display', serif;
+      overflow: hidden;
+      position: relative;
     }
 
     .box {
       background: #ffffff;
-      border: 1px solid #000000;
-      padding: 30px 80px;
+      padding: 60px 120px;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      cursor: pointer;
+      z-index: 2;
     }
 
     .name {
-      color: #000000;
-      font-size: 48px;
-      font-weight: 700;
+      font-size: 64px;
+      letter-spacing: 8px;
       text-align: center;
+      display: flex;
+      gap: 5px;
+    }
+
+    .letter {
+      display: inline-block;
+      animation: colorShift 3s infinite, pulse 2s infinite;
+    }
+
+    .letter:nth-child(1) { animation-delay: 0s; }
+    .letter:nth-child(2) { animation-delay: 0.2s; }
+    .letter:nth-child(3) { animation-delay: 0.4s; }
+    .letter:nth-child(4) { animation-delay: 0.6s; }
+    .letter:nth-child(5) { animation-delay: 0.8s; }
+    .letter:nth-child(6) { animation-delay: 1s; }
+
+    @keyframes colorShift {
+      0%   { color: #000000; }
+      10%  { color: #ffffff; }
+      20%  { color: #ff4d4d; }
+      30%  { color: #ff9900; }
+      40%  { color: #ffff66; }
+      50%  { color: #66ff66; }
+      60%  { color: #66ccff; }
+      70%  { color: #9966ff; }
+      80%  { color: #ff66cc; }
+      90%  { color: #ffffff; }
+      100% { color: #000000; }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        text-shadow: 0 0 5px rgba(255,255,255,0.2);
+      }
+      50% {
+        transform: scale(1.15);
+        text-shadow: 0 0 20px rgba(255,255,255,0.6);
+      }
+    }
+
+    .music-btn {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      z-index: 3;
+      background: rgba(255,255,255,0.92);
+      color: #000;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    .music-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .hint {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.85);
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      z-index: 3;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .box {
+        padding: 40px 60px;
+      }
+
+      .name {
+        font-size: 40px;
+        letter-spacing: 4px;
+      }
+
+      .music-btn {
+        bottom: 16px;
+        right: 16px;
+        padding: 10px 14px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="box">
-    <div class="name">Nadine</div>
+
+  <div class="hint">Tap anywhere to start the music</div>
+
+  <div class="box" onclick="goSomewhere()">
+    <div class="name">
+      <span class="letter">N</span>
+      <span class="letter">A</span>
+      <span class="letter">D</span>
+      <span class="letter">I</span>
+      <span class="letter">N</span>
+      <span class="letter">E</span>
+    </div>
   </div>
+
+  <button class="music-btn" onclick="toggleMusic(event)">🔊 Music On</button>
+
+  <audio id="bgMusic" loop>
+    <source src="cheerful-music.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const music = document.getElementById("bgMusic");
+    const musicBtn = document.querySelector(".music-btn");
+    const hint = document.querySelector(".hint");
+    let started = false;
+
+    function startMusic() {
+      if (!started) {
+        music.volume = 0.4;
+        music.play().then(() => {
+          started = true;
+          hint.style.display = "none";
+          musicBtn.textContent = "🔊 Music On";
+        }).catch(() => {});
+      }
+    }
+
+    document.body.addEventListener("click", startMusic, { once: true });
+
+    function toggleMusic(event) {
+      event.stopPropagation();
+
+      if (music.paused) {
+        music.play();
+        musicBtn.textContent = "🔊 Music On";
+        hint.style.display = "none";
+      } else {
+        music.pause();
+        musicBtn.textContent = "🔈 Music Off";
+      }
+    }
+
+    function goSomewhere() {
+      window.location.href = "https://wa.me/961XXXXXXXX";
+    }
+  </script>
+
 </body>
 </html>
